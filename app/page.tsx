@@ -1,6 +1,14 @@
 import Link from "next/link";
+import { todo } from "node:test";
+import { prisma } from "./db";
+import { getDefaultFormatCodeSettings } from "typescript";
 
-export default function home() {
+function getTodos() {
+  return prisma.todo.findMany();
+}
+export default async function Home() {
+  let allTodos = await getTodos();
+  await prisma.todo.create({ data: { title: "test", complete: false } });
   return (
     <div>
       <header className="flex justify-between">
@@ -13,7 +21,10 @@ export default function home() {
           </Link>
         </ul>
       </header>
-      <h1 className="underline text-center">Hi Star hihih</h1>
+      <h1 className=" text-center">Todos</h1>
+      {allTodos.map((todo) => {
+        return <li key={todo.id}>{todo.title}</li>;
+      })}
     </div>
   );
 }
