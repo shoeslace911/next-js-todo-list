@@ -1,13 +1,14 @@
 import Link from "next/link";
 import { todo } from "node:test";
 import { prisma } from "./db";
-import { getDefaultFormatCodeSettings } from "typescript";
+import TodoItem from "./comp/TodoItem";
 
 function getTodos() {
   return prisma.todo.findMany();
 }
 export default async function Home() {
   let allTodos = await getTodos();
+
   await prisma.todo.create({ data: { title: "test", complete: false } });
   return (
     <div>
@@ -22,9 +23,10 @@ export default async function Home() {
         </ul>
       </header>
       <h1 className=" text-center">Todos</h1>
-      {allTodos.map((todo) => {
-        return <li key={todo.id}>{todo.title}</li>;
-      })}
+      {/* destructuring should have the same name as schema */}
+      {allTodos.map((todo) => (
+        <TodoItem key={todo.id} {...todo} />
+      ))}
     </div>
   );
 }
