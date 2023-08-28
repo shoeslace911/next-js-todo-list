@@ -9,7 +9,6 @@ function getTodos() {
 export default async function Home() {
   let allTodos = await getTodos();
 
-  await prisma.todo.create({ data: { title: "test", complete: false } });
   return (
     <div>
       <header className="flex justify-between">
